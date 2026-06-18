@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 import {
   ArrowRight,
   BadgeCheck,
@@ -26,10 +27,24 @@ import {
   Zap,
 } from "lucide-react";
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 type RevealProps = {
   children: React.ReactNode;
   delay?: number;
   className?: string;
+};
+
+type ContactFormState = {
+  name: string;
+  phone: string;
+  email: string;
+  location: string;
+  service: string;
+  message: string;
 };
 
 function Reveal({ children, delay = 0, className = "" }: RevealProps) {
@@ -197,7 +212,93 @@ export default function Page() {
   const [showSplash, setShowSplash] = useState(false);
   const [hideSplash, setHideSplash] = useState(false);
 
+  const [form, setForm] = useState<ContactFormState>({
+    name: "",
+    phone: "",
+    email: "",
+    location: "",
+    service: "",
+    message: "",
+  });
+
+  const [sending, setSending] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const closeMenu = () => setMenuOpen(false);
+
+  const updateForm = (field: keyof ContactFormState, value: string) => {
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+
+    if (successMessage) {
+      setSuccessMessage("");
+    }
+
+    if (errorMessage) {
+      setErrorMessage("");
+    }
+  };
+
+  const handleContactSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    if (!form.name.trim()) {
+      setErrorMessage("Bitte geben Sie Ihren Namen ein.");
+      return;
+    }
+
+    if (!form.email.trim()) {
+      setErrorMessage("Bitte geben Sie Ihre E-Mail-Adresse ein.");
+      return;
+    }
+
+    if (!form.message.trim()) {
+      setErrorMessage("Bitte beschreiben Sie kurz Ihr Projekt.");
+      return;
+    }
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      setErrorMessage("Supabase ist noch nicht verbunden. Bitte .env.local prüfen.");
+      return;
+    }
+
+    setSending(true);
+
+    const { error } = await supabase.from("contact_requests").insert({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim() || null,
+      location: form.location.trim() || null,
+      service: form.service || null,
+      message: form.message.trim(),
+      status: "new",
+    });
+
+    setSending(false);
+
+    if (error) {
+      console.error("Kontaktformular Fehler:", error);
+      setErrorMessage("Die Anfrage konnte leider nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie direkt an.");
+      return;
+    }
+
+    setSuccessMessage("Danke! Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns schnellstmöglich persönlich bei Ihnen.");
+
+    setForm({
+      name: "",
+      phone: "",
+      email: "",
+      location: "",
+      service: "",
+      message: "",
+    });
+  };
 
   useEffect(() => {
     const alreadyShown = sessionStorage.getItem("ae-logo-splash-shown");
@@ -249,8 +350,6 @@ export default function Page() {
             <div className="mt-8 w-full max-w-[280px] overflow-hidden rounded-full bg-slate-200 sm:max-w-[340px]">
               <div className="h-1.5 origin-left animate-[aeSplashLoad_2.3s_ease-in-out_forwards] rounded-full bg-slate-950" />
             </div>
-
-
           </div>
         </div>
       )}
@@ -804,35 +903,84 @@ export default function Page() {
           </Reveal>
 
           <Reveal delay={120}>
-            <form className="rounded-[2rem] border border-slate-200 bg-white p-4 shadow-2xl shadow-slate-200 sm:rounded-[2.5rem] sm:p-8">
+            <form
+              onSubmit={handleContactSubmit}
+              className="rounded-[2rem] border border-slate-200 bg-white p-4 shadow-2xl shadow-slate-200 sm:rounded-[2.5rem] sm:p-8"
+            >
               <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
-                <input className="input" placeholder="Name" />
-                <input className="input" placeholder="Telefon" />
+                <input
+                  className="input"
+                  placeholder="Name"
+                  value={form.name}
+                  onChange={(event) => updateForm("name", event.target.value)}
+                  autoComplete="name"
+                />
+                <input
+                  className="input"
+                  placeholder="Telefon"
+                  value={form.phone}
+                  onChange={(event) => updateForm("phone", event.target.value)}
+                  autoComplete="tel"
+                />
               </div>
 
-              <input className="input mt-3 sm:mt-4" placeholder="E-Mail" />
+              <input
+                className="input mt-3 sm:mt-4"
+                placeholder="E-Mail"
+                type="email"
+                value={form.email}
+                onChange={(event) => updateForm("email", event.target.value)}
+                autoComplete="email"
+              />
 
-              <select className="input mt-3 sm:mt-4" defaultValue="">
+              <input
+                className="input mt-3 sm:mt-4"
+                placeholder="Ort / PLZ"
+                value={form.location}
+                onChange={(event) => updateForm("location", event.target.value)}
+                autoComplete="address-level2"
+              />
+
+              <select
+                className="input mt-3 sm:mt-4"
+                value={form.service}
+                onChange={(event) => updateForm("service", event.target.value)}
+              >
                 <option value="" disabled>
                   Welche Leistung?
                 </option>
-                <option>Doppelstabmattenzaun</option>
-                <option>Sichtschutz</option>
-                <option>Schiebetor / Drehtor</option>
-                <option>Industriezaun</option>
-                <option>Reparatur / Erweiterung</option>
+                <option value="Doppelstabmattenzaun">Doppelstabmattenzaun</option>
+                <option value="Sichtschutz">Sichtschutz</option>
+                <option value="Schiebetor / Drehtor">Schiebetor / Drehtor</option>
+                <option value="Industriezaun">Industriezaun</option>
+                <option value="Reparatur / Erweiterung">Reparatur / Erweiterung</option>
               </select>
 
               <textarea
                 className="input mt-3 min-h-32 resize-none sm:mt-4 sm:min-h-36"
                 placeholder="Kurz beschreiben: Länge, Höhe, Ort, gewünschtes Tor ..."
+                value={form.message}
+                onChange={(event) => updateForm("message", event.target.value)}
               />
 
+              {errorMessage && (
+                <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold leading-6 text-red-700">
+                  {errorMessage}
+                </div>
+              )}
+
+              {successMessage && (
+                <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold leading-6 text-emerald-800">
+                  {successMessage}
+                </div>
+              )}
+
               <button
-                type="button"
-                className="mt-4 w-full rounded-2xl bg-slate-950 px-6 py-4 font-black text-white shadow-lg shadow-slate-400/20 transition hover:bg-slate-800 sm:mt-5"
+                type="submit"
+                disabled={sending}
+                className="mt-4 w-full rounded-2xl bg-slate-950 px-6 py-4 font-black text-white shadow-lg shadow-slate-400/20 transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400 sm:mt-5"
               >
-                Anfrage absenden
+                {sending ? "Anfrage wird gesendet ..." : "Anfrage absenden"}
               </button>
 
               <p className="mt-4 text-center text-xs leading-5 text-slate-500">
