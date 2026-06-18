@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
 import {
   ArrowRight,
   BadgeCheck,
@@ -26,11 +25,6 @@ import {
   X,
   Zap,
 } from "lucide-react";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 type RevealProps = {
   children: React.ReactNode;
@@ -263,41 +257,54 @@ export default function Page() {
       return;
     }
 
-    if (!supabaseUrl || !supabaseAnonKey) {
-      setErrorMessage("Supabase ist noch nicht verbunden. Bitte .env.local prüfen.");
-      return;
-    }
-
     setSending(true);
 
-    const { error } = await supabase.from("contact_requests").insert({
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim() || null,
-      location: form.location.trim() || null,
-      service: form.service || null,
-      message: form.message.trim(),
-      status: "new",
-    });
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          location: form.location.trim(),
+          service: form.service,
+          message: form.message.trim(),
+        }),
+      });
 
-    setSending(false);
+      const result = await response.json();
 
-    if (error) {
+      if (!response.ok) {
+        setErrorMessage(
+          result?.error ||
+            "Die Anfrage konnte leider nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie direkt an."
+        );
+        return;
+      }
+
+      setSuccessMessage(
+        "Danke! Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns schnellstmöglich persönlich bei Ihnen."
+      );
+
+      setForm({
+        name: "",
+        phone: "",
+        email: "",
+        location: "",
+        service: "",
+        message: "",
+      });
+    } catch (error) {
       console.error("Kontaktformular Fehler:", error);
-      setErrorMessage("Die Anfrage konnte leider nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie direkt an.");
-      return;
+      setErrorMessage(
+        "Die Anfrage konnte leider nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie direkt an."
+      );
+    } finally {
+      setSending(false);
     }
-
-    setSuccessMessage("Danke! Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns schnellstmöglich persönlich bei Ihnen.");
-
-    setForm({
-      name: "",
-      phone: "",
-      email: "",
-      location: "",
-      service: "",
-      message: "",
-    });
   };
 
   useEffect(() => {
