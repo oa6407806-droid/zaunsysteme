@@ -58,19 +58,19 @@ export default function ImpressumPage() {
               <p>
                 <strong className="text-slate-950">Inhaber / Betreiber:</strong>
                 <br />
-                BITTE ECHTEN NAMEN EINTRAGEN
+                Medine Kemac
               </p>
 
               <p>
                 <strong className="text-slate-950">Rechtsform:</strong>
                 <br />
-                BITTE ERGÄNZEN, z.B. Einzelunternehmen, GmbH, OG
+                Einzelunternehmen
               </p>
 
               <p>
                 <strong className="text-slate-950">Sitz / Anschrift:</strong>
                 <br />
-                BITTE STRASSE, PLZ UND ORT EINTRAGEN
+                Linzer Bundesstraße 16, 5020 Salzburg, Österreich
               </p>
 
               <p>
@@ -105,7 +105,7 @@ export default function ImpressumPage() {
 
               <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 font-black text-slate-900">
                 <MapPin className="h-5 w-5 text-slate-600" />
-                Salzburg / Österreich
+                Linzer Bundesstraße 16, 5020 Salzburg, Österreich
               </div>
             </div>
           </section>
@@ -119,31 +119,31 @@ export default function ImpressumPage() {
               <p>
                 <strong className="text-slate-950">Firmenbuchnummer:</strong>
                 <br />
-                BITTE EINTRAGEN ODER „nicht im Firmenbuch eingetragen“
+                Nicht im Firmenbuch eingetragen
               </p>
 
               <p>
                 <strong className="text-slate-950">UID-Nummer:</strong>
                 <br />
-                BITTE EINTRAGEN, falls vorhanden
+                ATU78063239
               </p>
 
               <p>
                 <strong className="text-slate-950">GISA-Zahl / Gewerbeberechtigung:</strong>
                 <br />
-                BITTE EINTRAGEN, falls vorhanden
+                GISA-Zahl derzeit nicht angegeben
               </p>
 
               <p>
                 <strong className="text-slate-950">Zuständige Aufsichtsbehörde:</strong>
                 <br />
-                BITTE EINTRAGEN, z.B. Bezirkshauptmannschaft / Magistrat
+                Magistrat der Stadt Salzburg
               </p>
 
               <p>
                 <strong className="text-slate-950">Mitgliedschaft:</strong>
                 <br />
-                Wirtschaftskammer Österreich, zuständige Fachgruppe bitte ergänzen.
+                Wirtschaftskammer Salzburg
               </p>
             </div>
           </section>
@@ -168,17 +168,6 @@ export default function ImpressumPage() {
             </div>
           </section>
 
-          <section className="rounded-[2rem] border border-slate-200 bg-slate-950 p-6 text-white shadow-sm sm:p-8">
-            <h2 className="text-2xl font-black tracking-tight">
-              Hinweis
-            </h2>
-
-            <p className="mt-5 text-[15px] leading-7 text-slate-300 sm:text-base">
-              Diese Impressumsseite ist technisch vorbereitet. Die rechtlich
-              verpflichtenden Unternehmensdaten müssen vor Veröffentlichung
-              vollständig und korrekt ergänzt werden.
-            </p>
-          </section>
         </div>
       </section>
     </main>

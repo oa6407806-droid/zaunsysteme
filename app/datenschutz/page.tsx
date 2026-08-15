@@ -59,7 +59,7 @@ export default function DatenschutzPage() {
               <p>
                 <strong className="text-slate-950">Anschrift:</strong>
                 <br />
-                BITTE STRASSE, PLZ UND ORT EINTRAGEN
+                Linzer Bundesstraße 16, 5020 Salzburg
               </p>
 
               <p>
@@ -125,10 +125,12 @@ export default function DatenschutzPage() {
 
             <p className="mt-6 text-[15px] leading-7 text-slate-600 sm:text-base">
               Wenn Sie per Formular oder E-Mail Kontakt aufnehmen, werden Ihre
-              angegebenen Daten zwecks Bearbeitung der Anfrage und für den Fall
-              von Anschlussfragen gespeichert. Diese Daten geben wir nicht ohne
-              Ihre Einwilligung weiter, sofern keine gesetzliche Pflicht oder
-              vertragliche Notwendigkeit besteht.
+              angegebenen Daten zur Bearbeitung Ihrer Anfrage und für mögliche
+              Anschlussfragen verarbeitet. Anfragedaten werden grundsätzlich nur so lange
+              gespeichert, wie dies für die Bearbeitung erforderlich ist; längere
+              Aufbewahrungsfristen können sich aus gesetzlichen oder vertraglichen Pflichten
+              ergeben. Eine Weitergabe erfolgt nur, soweit sie zur Bearbeitung erforderlich
+              ist, eine gesetzliche Verpflichtung besteht oder Sie eingewilligt haben.
             </p>
           </section>
 
@@ -139,17 +141,33 @@ export default function DatenschutzPage() {
 
             <div className="mt-6 grid gap-4 text-[15px] leading-7 text-slate-600 sm:text-base">
               <p>
-                Diese Website ist als einfache Firmenwebsite vorbereitet. Sollten
-                später Analyse-Tools, Tracking, Karten, Videos, Chatdienste oder
-                externe Schriftarten eingebunden werden, muss diese Datenschutzerklärung
-                entsprechend ergänzt werden.
+                Soweit auf dieser Website technisch notwendige Cookies oder vergleichbare
+                Technologien eingesetzt werden, dienen diese ausschließlich dem sicheren
+                und funktionsfähigen Betrieb der Website.
               </p>
 
               <p>
-                Falls ausschließlich technisch notwendige Cookies verwendet werden,
-                dienen diese dem sicheren und funktionsfähigen Betrieb der Website.
+                Dienste, die eine Einwilligung erfordern, insbesondere Analyse-,
+                Marketing- oder Tracking-Dienste, werden nur auf Grundlage Ihrer zuvor
+                erteilten Einwilligung eingesetzt. Eine erteilte Einwilligung kann jederzeit
+                mit Wirkung für die Zukunft widerrufen werden.
               </p>
             </div>
+          </section>
+
+          <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <h2 className="text-2xl font-black tracking-tight text-slate-950">
+              Hosting und technische Bereitstellung
+            </h2>
+
+            <p className="mt-6 text-[15px] leading-7 text-slate-600 sm:text-base">
+              Zur sicheren und zuverlässigen Bereitstellung dieser Website werden
+              technische Zugriffsdaten verarbeitet. Dazu können insbesondere IP-Adresse,
+              Datum und Uhrzeit des Zugriffs, aufgerufene Seite, Browser- und
+              Geräteinformationen gehören. Soweit hierfür Hosting- oder IT-Dienstleister
+              eingesetzt werden, verarbeiten diese Daten ausschließlich im Rahmen der
+              gesetzlichen Vorgaben und unserer Weisungen.
+            </p>
           </section>
 
           <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
@@ -163,10 +181,10 @@ export default function DatenschutzPage() {
 
             <p className="mt-6 text-[15px] leading-7 text-slate-600 sm:text-base">
               Personenbezogene Daten werden nur so lange gespeichert, wie dies für
-              die jeweiligen Zwecke erforderlich ist oder gesetzliche
-              Aufbewahrungspflichten bestehen. Anfragedaten werden gelöscht, sobald
-              sie für die Bearbeitung nicht mehr erforderlich sind, sofern keine
-              gesetzlichen Fristen entgegenstehen.
+              die jeweiligen Zwecke erforderlich ist oder gesetzliche beziehungsweise
+              vertragliche Aufbewahrungspflichten bestehen. Danach werden die Daten
+              gelöscht oder anonymisiert, sofern keine weitere rechtliche Grundlage für
+              die Verarbeitung besteht.
             </p>
           </section>
 
@@ -183,11 +201,10 @@ export default function DatenschutzPage() {
               </p>
 
               <p>
-                Wenn Sie glauben, dass die Verarbeitung Ihrer Daten gegen das
-                Datenschutzrecht verstößt oder Ihre datenschutzrechtlichen Ansprüche
-                verletzt worden sind, können Sie sich bei der zuständigen
-                Aufsichtsbehörde beschweren. In Österreich ist dies die
-                Datenschutzbehörde.
+                Wenn Sie der Ansicht sind, dass die Verarbeitung Ihrer personenbezogenen
+                Daten gegen das Datenschutzrecht verstößt, haben Sie das Recht auf
+                Beschwerde bei der Österreichischen Datenschutzbehörde, Barichgasse 40–42,
+                1030 Wien, E-Mail: dsb@dsb.gv.at.
               </p>
             </div>
           </section>
@@ -205,18 +222,6 @@ export default function DatenschutzPage() {
             </p>
           </section>
 
-          <section className="rounded-[2rem] border border-slate-200 bg-slate-950 p-6 text-white shadow-sm sm:p-8">
-            <h2 className="text-2xl font-black tracking-tight">
-              Wichtiger Hinweis
-            </h2>
-
-            <p className="mt-5 text-[15px] leading-7 text-slate-300 sm:text-base">
-              Diese Datenschutzerklärung ist eine vorbereitete technische Vorlage.
-              Sie muss vor Veröffentlichung an die tatsächlichen Funktionen der
-              Website, verwendete Dienste, Hosting, Cookies und Unternehmensdaten
-              angepasst werden.
-            </p>
-          </section>
         </div>
       </section>
     </main>

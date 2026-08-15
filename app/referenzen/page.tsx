@@ -1,20 +1,90 @@
 import { ArrowLeft, Images, Mail } from "lucide-react";
 
 const projects = [
-  "/images/photo7.jpeg",
-  "/images/photo8.jpeg",
-  "/images/photo9.jpeg",
-  "/images/photo10.jpeg",
-  "/images/photo11.jpeg",
-  "/images/photo12.jpeg",
-  "/images/photo13.jpeg",
-  "/images/photo14.jpeg",
-  "/images/photo15.jpeg",
-  "/images/photo16.jpeg",
-  "/images/photo17.jpeg",
-  "/images/photo18.jpeg",
-  "/images/photo19.jpeg",
-  "/images/photo20.jpeg",
+  {
+    image: "/images/photo7.jpeg",
+    title: "Modernes Gartentor mit Doppelstabmattenzaun",
+    description:
+      "Robuste Zaunlösung mit praktischem Zugang und moderner Optik.",
+  },
+  {
+    image: "/images/photo8.jpeg",
+    title: "Sichere Poolabgrenzung mit Gartentor",
+    description:
+      "Sauber montierte Zaunanlage für mehr Sicherheit rund um den Pool.",
+  },
+  {
+    image: "/images/photo9.jpeg",
+    title: "Moderner Sichtschutz auf Steinmauer",
+    description:
+      "Hochwertiger Sichtschutz in Anthrazit für mehr Privatsphäre.",
+  },
+  {
+    image: "/images/photo10.jpeg",
+    title: "Doppelflügeltor in Anthrazit",
+    description:
+      "Stabiles Tor mit moderner Lamellenoptik und hochwertiger Ausführung.",
+  },
+  {
+    image: "/images/photo11.jpeg",
+    title: "Doppelstabmattenzaun mit Sichtschutz",
+    description:
+      "Langlebige Zaunanlage mit grünem Sichtschutz für mehr Privatsphäre.",
+  },
+  {
+    image: "/images/photo12.jpeg",
+    title: "Langer Gartenzaun mit Sichtschutz",
+    description:
+      "Saubere und stabile Einfriedung für einen geschützten Gartenbereich.",
+  },
+  {
+    image: "/images/photo13.jpeg",
+    title: "Anthrazitfarbener Sichtschutzzaun",
+    description:
+      "Moderne Zaunlösung mit blickdichter Ausführung entlang des Grundstücks.",
+  },
+  {
+    image: "/images/photo14.jpeg",
+    title: "Gabionenzaun mit Sichtschutzelementen",
+    description:
+      "Individuelle Kombination aus Steinkörben und modernem Sichtschutz.",
+  },
+  {
+    image: "/images/photo15.jpeg",
+    title: "Gabionen und Doppelstabmattenzaun",
+    description:
+      "Robuste Grundstückseinfriedung mit dekorativen Gabionenelementen.",
+  },
+  {
+    image: "/images/photo16.jpeg",
+    title: "Sichtschutzzaun für den Garten",
+    description:
+      "Blickdichte Zaunlösung für mehr Ruhe und Privatsphäre.",
+  },
+  {
+    image: "/images/photo17.jpeg",
+    title: "Doppelstabmattenzaun für große Flächen",
+    description:
+      "Stabile und langlebige Zaunanlage mit sauberer Linienführung.",
+  },
+  {
+    image: "/images/photo18.jpeg",
+    title: "Zaun- und Toranlage für Gewerbeflächen",
+    description:
+      "Funktionale Einfriedung mit Toranlage für sichere Grundstücksgrenzen.",
+  },
+  {
+    image: "/images/photo19.jpeg",
+    title: "Modernes Lamellentor in Silber",
+    description:
+      "Elegante Torlösung mit zeitgemäßem Design und hochwertiger Verarbeitung.",
+  },
+  {
+    image: "/images/photo20.jpeg",
+    title: "Doppelstabmattenzaun für Gewerbeobjekt",
+    description:
+      "Robuste Zaunanlage für eine sichere und dauerhafte Abgrenzung.",
+  },
 ];
 
 export default function ReferenzenPage() {
@@ -63,14 +133,14 @@ export default function ReferenzenPage() {
 
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((image, index) => (
+          {projects.map((project) => (
             <article
-              key={image}
+              key={project.image}
               className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-slate-200"
             >
               <div
                 style={{
-                  backgroundImage: `url("${image}")`,
+                  backgroundImage: `url("${project.image}")`,
                   height: "320px",
                   borderRadius: "1.5rem",
                   backgroundSize: "cover",
@@ -79,17 +149,12 @@ export default function ReferenzenPage() {
               />
 
               <div className="p-4">
-                <div className="text-xs font-black uppercase tracking-[0.18em] text-slate-600">
-                  Referenzprojekt
-                </div>
-
-                <h3 className="mt-2 text-xl font-black text-slate-950">
-                  Projekt {index + 1}
+                <h3 className="text-xl font-black text-slate-950">
+                  {project.title}
                 </h3>
 
                 <p className="mt-2 leading-7 text-slate-600">
-                  Hochwertige Zaun- und Toranlage mit sauberer Montage,
-                  langlebigen Materialien und moderner Optik.
+                  {project.description}
                 </p>
               </div>
             </article>

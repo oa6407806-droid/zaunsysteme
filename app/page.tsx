@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
 import {
   ArrowRight,
   BadgeCheck,
@@ -27,10 +26,6 @@ import {
   Zap,
 } from "lucide-react";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 type RevealProps = {
   children: React.ReactNode;
@@ -263,36 +258,45 @@ export default function Page() {
       return;
     }
 
-    if (!supabaseUrl || !supabaseAnonKey) {
-      setErrorMessage("Supabase ist noch nicht verbunden. Bitte Umgebungsvariablen prüfen.");
-      return;
-    }
-
     setSending(true);
 
-    const { error } = await supabase.from("contact_requests").insert({
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim() || null,
-      location: form.location.trim() || null,
-      service: form.service || null,
-      message: form.message.trim(),
-      status: "new",
-    });
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          location: form.location.trim(),
+          service: form.service,
+          message: form.message.trim(),
+        }),
+      });
 
-    setSending(false);
+      const result = await response.json();
 
-    if (error) {
+      if (!response.ok) {
+        throw new Error(result?.error || "Die Anfrage konnte nicht gesendet werden.");
+      }
+
+      setSuccessMessage(
+        "Danke! Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns schnellstmöglich persönlich bei Ihnen."
+      );
+    } catch (error) {
       console.error("Kontaktformular Fehler:", error);
       setErrorMessage(
-        "Die Anfrage konnte leider nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie direkt an."
+        error instanceof Error
+          ? error.message
+          : "Die Anfrage konnte leider nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie direkt an."
       );
+      setSending(false);
       return;
     }
 
-    setSuccessMessage(
-      "Danke! Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns schnellstmöglich persönlich bei Ihnen."
-    );
+    setSending(false);
 
     setForm({
       name: "",
@@ -472,101 +476,65 @@ export default function Page() {
         )}
       </header>
 
-      <section className="relative isolate overflow-hidden pt-28 sm:pt-36 lg:pt-40">
+      <section className="relative isolate min-h-[92vh] overflow-hidden pt-28 sm:pt-32 lg:pt-36">
         <div
-          className="absolute inset-0 z-0 bg-cover bg-center opacity-70 md:hidden"
-          style={{ backgroundImage: 'url("/images/salzburg-hero-mobile.jpeg")' }}
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url("/images/hero-zaun.jpeg")' }}
         />
-        <div
-          className="absolute inset-0 z-0 hidden bg-cover bg-center opacity-65 md:block"
-          style={{ backgroundImage: 'url("/images/salzburg-hero-desktop.jpeg")' }}
-        />
-        <div className="absolute inset-0 z-[1] bg-gradient-to-b from-white/62 via-slate-50/76 to-slate-50" />
-        <div className="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.50),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(226,232,240,0.30),transparent_32%)]" />
-        <div className="absolute left-1/2 top-0 z-[3] h-[520px] w-[850px] -translate-x-1/2 rounded-full bg-white/35 blur-3xl sm:h-[720px] sm:w-[1000px]" />
-        <div className="absolute right-0 top-80 z-[3] h-[260px] w-[260px] rounded-full bg-slate-200/45 blur-3xl sm:h-[360px] sm:w-[360px]" />
+        <div className="absolute inset-0 z-[1] bg-gradient-to-br from-white/96 via-white/78 to-slate-950/26" />
+        <div className="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.92),transparent_32%),radial-gradient(circle_at_72%_18%,rgba(255,255,255,0.34),transparent_28%),linear-gradient(90deg,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.76)_43%,rgba(255,255,255,0.18)_100%)]" />
+        <div className="absolute bottom-0 left-0 right-0 z-[3] h-44 bg-gradient-to-t from-slate-50 via-slate-50/88 to-transparent" />
 
-        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 px-5 pb-16 sm:px-6 sm:pb-20 lg:grid-cols-[1fr_1fr] lg:px-8 lg:pb-28">
+        <div className="relative z-10 mx-auto flex min-h-[calc(92vh-7rem)] max-w-7xl items-center px-5 pb-16 sm:px-6 sm:pb-20 lg:px-8">
           <Reveal>
-            <div>
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-3.5 py-2 text-[12px] font-black text-slate-700 shadow-sm sm:mb-6 sm:px-4 sm:text-sm">
+            <div className="max-w-4xl">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white/90 px-3.5 py-2 text-[12px] font-black uppercase tracking-[0.16em] text-slate-700 shadow-sm backdrop-blur-xl sm:mb-6 sm:px-4 sm:text-sm">
                 <Sparkles className="h-4 w-4" />
                 Salzburg & Österreich
               </div>
 
-              <h1 className="max-w-4xl text-[clamp(2.8rem,12vw,4.8rem)] font-black leading-[0.92] tracking-[-0.07em] text-slate-950 lg:text-7xl">
-                Perfekte Zäune. Perfekt montiert.
+              <h1 className="max-w-5xl text-[clamp(3.05rem,12vw,6.75rem)] font-black leading-[0.86] tracking-[-0.085em] text-slate-950">
+                Zaun & Toranlagen, die sofort hochwertig wirken.
               </h1>
 
-              <p className="mt-6 max-w-2xl text-[17px] leading-8 text-slate-600 sm:mt-7 sm:text-xl sm:leading-9">
-                A&E Zaun & Torsysteme plant und montiert hochwertige Zäune,
-                Sichtschutz, Einfahrtstore und Sicherheitslösungen für Privat,
-                Gewerbe und Industrie. Regional verwurzelt. Österreichweit im Einsatz.
+              <p className="mt-6 max-w-2xl text-[17px] font-semibold leading-8 text-slate-700 sm:mt-7 sm:text-xl sm:leading-9">
+                A&E Zaun & Torsysteme plant und montiert moderne Zäune,
+                Sichtschutz, Einfahrtstore und Sicherheitslösungen — sauber,
+                stabil und passend zum Objekt.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:gap-4">
                 <a
                   href="#kontakt"
-                  className="group inline-flex items-center justify-center rounded-2xl bg-slate-950 px-6 py-4 text-[15px] font-black text-white shadow-2xl shadow-slate-400/20 transition hover:bg-slate-800 sm:px-7 sm:text-base"
+                  className="group inline-flex items-center justify-center rounded-2xl bg-slate-950 px-6 py-4 text-[15px] font-black text-white shadow-2xl shadow-slate-950/20 transition hover:bg-slate-800 sm:px-7 sm:text-base"
                 >
                   Kostenloses Angebot anfordern
                   <ArrowRight className="ml-2 h-5 w-5 transition group-hover:translate-x-1" />
                 </a>
                 <a
-                  href="#projekte"
-                  className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-4 text-[15px] font-black text-slate-950 shadow-sm transition hover:border-slate-300 hover:text-slate-700 sm:px-7 sm:text-base"
+                  href="tel:+436769752166"
+                  className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white/92 px-6 py-4 text-[15px] font-black text-slate-950 shadow-sm backdrop-blur-xl transition hover:border-slate-400 hover:bg-white sm:px-7 sm:text-base"
                 >
-                  Projekte ansehen
+                  Direkt anrufen
                 </a>
               </div>
 
-              <div className="mt-8 grid max-w-xl grid-cols-3 gap-2.5 sm:mt-10 sm:gap-3">
+              <div className="mt-8 grid max-w-2xl grid-cols-3 gap-2.5 sm:mt-10 sm:gap-3">
                 {[
-                  ["A-Z", "Betreuung"],
-                  ["Sauber", "Montage"],
-                  ["Regional", "Service"],
-                ].map(([number, label]) => (
+                  ["Stabil", "Montage"],
+                  ["Modern", "Design"],
+                  ["Wertig", "Qualität"],
+                ].map(([title, label]) => (
                   <div
-                    key={label}
-                    className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:rounded-3xl sm:p-4"
+                    key={title}
+                    className="rounded-2xl border border-white/80 bg-white/86 p-3 shadow-lg shadow-slate-950/5 backdrop-blur-xl sm:rounded-3xl sm:p-5"
                   >
-                    <div className="text-xl font-black text-slate-950 sm:text-2xl">{number}</div>
-                    <div className="mt-1 text-[11px] font-bold text-slate-500 sm:text-xs">{label}</div>
+                    <div className="text-base font-black text-slate-950 sm:text-xl">{title}</div>
+                    <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500 sm:text-xs">
+                      {label}
+                    </div>
                   </div>
                 ))}
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <div className="relative mt-2 lg:mt-0">
-              <div className="absolute -inset-4 rounded-[2.3rem] bg-gradient-to-br from-slate-200 to-white blur-2xl sm:-inset-5 sm:rounded-[3rem]" />
-
-              <div className="relative overflow-hidden rounded-[2rem] border border-white bg-white p-2 shadow-2xl shadow-slate-200 sm:rounded-[2.5rem] sm:p-3">
-                <div
-                  className="relative min-h-[390px] overflow-hidden rounded-[1.6rem] bg-cover bg-center sm:min-h-[520px] sm:rounded-[2.2rem]"
-                  style={{
-                    backgroundImage:
-                      'linear-gradient(180deg, rgba(15, 23, 42, 0.04), rgba(15, 23, 42, 0.18)), url("/images/hero-zaun.jpg")',
-                  }}
-                />
-              </div>
-
-              <div className="relative mx-3 -mt-7 rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl shadow-slate-300/60 sm:mx-8 sm:-mt-8 sm:p-5">
-                <div className="grid grid-cols-3 gap-3 text-center">
-                  <div>
-                    <div className="text-sm font-black text-slate-950 sm:text-base">Stabil</div>
-                    <div className="mt-1 text-[11px] font-bold text-slate-500 sm:text-xs">Montage</div>
-                  </div>
-                  <div className="border-x border-slate-200">
-                    <div className="text-sm font-black text-slate-950 sm:text-base">Modern</div>
-                    <div className="mt-1 text-[11px] font-bold text-slate-500 sm:text-xs">Design</div>
-                  </div>
-                  <div>
-                    <div className="text-sm font-black text-slate-950 sm:text-base">Wertig</div>
-                    <div className="mt-1 text-[11px] font-bold text-slate-500 sm:text-xs">Qualität</div>
-                  </div>
-                </div>
               </div>
             </div>
           </Reveal>
