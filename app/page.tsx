@@ -261,7 +261,7 @@ export default function Page() {
     setSending(true);
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("/.netlify/functions/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -284,7 +284,7 @@ export default function Page() {
         try {
           result = JSON.parse(responseText);
         } catch {
-          console.error("Kontakt API lieferte keine gültige JSON-Antwort:", {
+          console.error("Kontakt-Funktion lieferte keine gültige JSON-Antwort:", {
             status: response.status,
             statusText: response.statusText,
             body: responseText,
