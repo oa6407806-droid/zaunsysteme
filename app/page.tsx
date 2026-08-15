@@ -276,10 +276,33 @@ export default function Page() {
         }),
       });
 
-      const result = await response.json();
+      const responseText = await response.text();
+
+      let result: { error?: string; success?: boolean; warning?: string } = {};
+
+      if (responseText) {
+        try {
+          result = JSON.parse(responseText);
+        } catch {
+          console.error("Kontakt API lieferte keine gültige JSON-Antwort:", {
+            status: response.status,
+            statusText: response.statusText,
+            body: responseText,
+          });
+        }
+      }
 
       if (!response.ok) {
-        throw new Error(result?.error || "Die Anfrage konnte nicht gesendet werden.");
+        throw new Error(
+          result?.error ||
+            `Kontaktserver nicht erreichbar (HTTP ${response.status}). Bitte versuchen Sie es erneut oder rufen Sie direkt an.`
+        );
+      }
+
+      if (!responseText) {
+        throw new Error(
+          `Kontaktserver hat leer geantwortet (HTTP ${response.status}). Bitte versuchen Sie es erneut oder rufen Sie direkt an.`
+        );
       }
 
       setSuccessMessage(
