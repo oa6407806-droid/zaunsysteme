@@ -1,5 +1,19 @@
 import { ArrowLeft, Building2, Mail, MapPin, Phone, ShieldCheck } from "lucide-react";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Impressum",
+  description: "Impressum und Unternehmensangaben von A&E Zaun & Torsysteme in Salzburg.",
+  alternates: {
+    canonical: "/impressum",
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
+
 export default function ImpressumPage() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950 antialiased">

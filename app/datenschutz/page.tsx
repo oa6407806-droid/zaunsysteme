@@ -1,5 +1,19 @@
 import { ArrowLeft, Database, LockKeyhole, Mail, ShieldCheck, UserCheck } from "lucide-react";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Datenschutz",
+  description: "Datenschutzerklärung von A&E Zaun & Torsysteme in Salzburg.",
+  alternates: {
+    canonical: "/datenschutz",
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
+
 export default function DatenschutzPage() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950 antialiased">

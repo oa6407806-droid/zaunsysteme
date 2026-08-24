@@ -1,5 +1,23 @@
 import { ArrowLeft, Images, Mail } from "lucide-react";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Referenzen – Zaun- & Torprojekte in Salzburg",
+  description:
+    "Referenzen von A&E Zaun & Torsysteme: Doppelstabmattenzäune, Sichtschutz, Gartentore, Gabionen und Toranlagen aus echten Projekten.",
+  alternates: {
+    canonical: "/referenzen",
+  },
+  openGraph: {
+    title: "Referenzen – Zaun- & Torprojekte in Salzburg",
+    description:
+      "Echte Zaun- und Torprojekte von A&E Zaun & Torsysteme.",
+    url: "/referenzen",
+    type: "website",
+  },
+};
+
 const projects = [
   {
     image: "/images/photo7.jpeg",
