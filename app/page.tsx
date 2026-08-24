@@ -93,31 +93,37 @@ const services = [
     icon: Fence,
     title: "Doppelstabmattenzäune",
     text: "Stabile Zaunsysteme für Privatgrundstücke, Gewerbe und Industrieflächen.",
+    href: "/doppelstabmattenzaun-salzburg",
   },
   {
     icon: Home,
     title: "Sichtschutz & Designzäune",
     text: "Hochwertige Sichtschutzlösungen für Garten, Terrasse und Grundstück.",
+    href: "/sichtschutz-salzburg",
   },
   {
     icon: Zap,
     title: "Schiebe- & Drehtore",
     text: "Manuelle oder elektrische Toranlagen mit sauberer Planung und Montage.",
+    href: "/tore-salzburg",
   },
   {
     icon: Building2,
     title: "Industriezäune",
     text: "Robuste Absicherung für Firmen, Hallen, Lagerflächen und sensible Bereiche.",
+    href: "/zaunbau-salzburg",
   },
   {
     icon: Hammer,
     title: "Montage vom Profi",
     text: "Exakte Ausrichtung, saubere Fundamente und zuverlässige Umsetzung vor Ort.",
+    href: "/zaunbau-salzburg",
   },
   {
     icon: Wrench,
     title: "Reparatur & Erweiterung",
     text: "Bestehende Zaunanlagen modernisieren, erweitern oder beschädigte Elemente ersetzen.",
+    href: "/zaunbau-salzburg",
   },
 ];
 
@@ -660,10 +666,13 @@ export default function Page() {
                     {item.title}
                   </h3>
                   <p className="mt-3 text-[15px] leading-7 text-slate-600 sm:mt-4 sm:text-base">{item.text}</p>
-                  <div className="mt-5 inline-flex items-center text-sm font-black text-slate-600 sm:mt-7">
+                  <a
+                    href={item.href}
+                    className="mt-5 inline-flex items-center text-sm font-black text-slate-600 transition hover:text-slate-950 sm:mt-7"
+                  >
                     Mehr erfahren
                     <ChevronRight className="ml-1 h-4 w-4 transition group-hover:translate-x-1" />
-                  </div>
+                  </a>
                 </article>
               </Reveal>
             );

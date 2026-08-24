@@ -6,6 +6,26 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://ae-zaun.at/zaunbau-salzburg</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ae-zaun.at/tore-salzburg</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ae-zaun.at/sichtschutz-salzburg</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ae-zaun.at/doppelstabmattenzaun-salzburg</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://ae-zaun.at/referenzen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
