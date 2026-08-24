@@ -62,49 +62,47 @@ export default async (request: Request) => {
       );
     }
 
-    if (!supabaseUrl || !supabaseAnonKey) {
-      return new Response(
-        JSON.stringify({ error: "Supabase Umgebungsvariablen fehlen." }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
+    // Supabase ist nur eine Zusatzspeicherung.
+    // Wenn das Projekt pausiert oder nicht erreichbar ist, darf die Kundenanfrage
+    // trotzdem per E-Mail versendet werden.
+    let dbSaved = false;
+
+    if (supabaseUrl && supabaseAnonKey) {
+      try {
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+        const { error: dbError } = await supabase.from("contact_requests").insert({
+          name,
+          email,
+          phone: phone || null,
+          location: location || null,
+          service: service || null,
+          message,
+          status: "new",
+        });
+
+        if (dbError) {
+          console.error("Supabase contact insert error:", dbError);
+        } else {
+          dbSaved = true;
         }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-    const { error: dbError } = await supabase.from("contact_requests").insert({
-      name,
-      email,
-      phone: phone || null,
-      location: location || null,
-      service: service || null,
-      message,
-      status: "new",
-    });
-
-    if (dbError) {
-      console.error("Supabase contact insert error:", dbError);
-
-      return new Response(
-        JSON.stringify({ error: "" }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        }
+      } catch (dbException) {
+        console.error("Supabase contact insert exception:", dbException);
+      }
+    } else {
+      console.warn(
+        "Supabase Umgebungsvariablen fehlen. Anfrage wird nur per E-Mail versendet."
       );
     }
 
     if (!resendApiKey) {
       return new Response(
         JSON.stringify({
-          success: true,
-          warning:
-            "Anfrage gespeichert, aber RESEND_API_KEY fehlt. E-Mail wurde nicht gesendet.",
+          error:
+            "E-Mail-Versand ist derzeit nicht verfügbar. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
         }),
         {
-          status: 200,
+          status: 500,
           headers: { "Content-Type": "application/json" },
         }
       );
@@ -163,7 +161,11 @@ export default async (request: Request) => {
                 Einfach auf diese E-Mail antworten – die Antwort geht direkt an ${safeName}.
               </div>
 
-              <p style="margin:22px 0 0;color:#64748b;font-size:12px;line-height:1.6">Die Anfrage wurde zusätzlich in Supabase gespeichert.</p>
+              <p style="margin:22px 0 0;color:#64748b;font-size:12px;line-height:1.6">${
+      dbSaved
+        ? "Die Anfrage wurde zusätzlich in Supabase gespeichert."
+        : "Hinweis: Die Anfrage wurde per E-Mail zugestellt, konnte aber aktuell nicht zusätzlich in Supabase gespeichert werden."
+    }</p>
             </div>
           </div>
         </div>
@@ -176,7 +178,7 @@ export default async (request: Request) => {
       return new Response(
         JSON.stringify({
           error:
-            "Die Anfrage wurde gespeichert, aber die E-Mail konnte nicht gesendet werden. Bitte Resend prüfen.",
+            "Die Anfrage konnte nicht per E-Mail zugestellt werden. Bitte Resend prüfen.",
         }),
         {
           status: 500,
@@ -247,7 +249,7 @@ export default async (request: Request) => {
       return new Response(
         JSON.stringify({
           success: true,
-          warning: "Anfrage gespeichert und intern versendet, aber die Bestätigungsmail an den Kunden konnte nicht gesendet werden.",
+          warning: "Die Anfrage wurde intern versendet, aber die Bestätigungsmail an den Kunden konnte nicht gesendet werden.",
         }),
         {
           status: 200,
