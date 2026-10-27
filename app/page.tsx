@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import AEReviewsSection from "../components/ae-reviews-section";
 import {
   ArrowRight,
   BadgeCheck,
@@ -593,6 +594,8 @@ export default function Page() {
           </div>
         </section>
       </Reveal>
+
+      <AEReviewsSection />
 
       <section className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8">
         <Reveal>
