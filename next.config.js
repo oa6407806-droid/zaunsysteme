@@ -1,8 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Kein output: "export": API-Routen brauchen einen Next.js Server / Netlify Functions.
-  images: { unoptimized: true },
+  images: {
+    unoptimized: true,
+  },
+
   allowedDevOrigins: ["192.168.178.35"],
-  turbopack: { root: "C:/Users/mleo0/Desktop/zaunsysteme" },
+
+  turbopack: {
+    root: __dirname,
+  },
 };
+
 module.exports = nextConfig;
